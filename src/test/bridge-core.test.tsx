@@ -11,18 +11,15 @@ import {
 } from "@/lib/bridge/core";
 
 const VERIFIER = "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk";
-const CHALLENGE = "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGcSEw-cM"; // RFC 7636 appendix B
+const CHALLENGE = "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM"; // RFC 7636 appendix B
 
 describe("bridge core", () => {
   it("computes RFC 7636 S256 challenge", async () => {
-    expect(await s256Challenge(VERIFIER)).toBe("E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGcSEw-cM");
+    expect(await s256Challenge(VERIFIER)).toBe(CHALLENGE);
   });
   it("accepts the matching verifier and rejects others", async () => {
-    // RFC vector challenge is 43 chars
-    const ch = await s256Challenge(VERIFIER);
-    expect(await pkceMatches(VERIFIER, ch)).toBe(true);
-    expect(await pkceMatches(VERIFIER.replace("d", "e"), ch)).toBe(false);
-    expect(CHALLENGE.length).toBe(42);
+    expect(await pkceMatches(VERIFIER, CHALLENGE)).toBe(true);
+    expect(await pkceMatches(VERIFIER.replace("d", "e"), CHALLENGE)).toBe(false);
   });
   it("redirect allowlist is exact-match only", () => {
     const reg = ["https://app.example.com/auth/callback"];
