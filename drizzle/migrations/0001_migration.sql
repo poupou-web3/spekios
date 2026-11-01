@@ -1,0 +1,1 @@
+ALTER TABLE public.bridge_clients ADD COLUMN launch_url text;
