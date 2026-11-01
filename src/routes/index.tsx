@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { SiteFooter, SiteHeader } from "@/components/site-header";
+import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -47,8 +48,7 @@ function Hero() {
           and evidence along the way, and surfaces potential bugs for you to reproduce and review.
         </p>
         <div className="mt-9 flex flex-wrap gap-3">
-          <Button asChild size="lg"><Link to="/auth" search={{ mode: "signup" }}>Get started</Link></Button>
-          <Button asChild size="lg" variant="outline"><Link to="/auth">Sign in</Link></Button>
+          <LandingActions />
         </div>
         <ProductPreview />
       </div>
@@ -190,10 +190,25 @@ function FinalCta() {
       <div className="mx-auto max-w-6xl px-5 py-24 text-center">
         <h2 className="font-display mx-auto max-w-2xl text-4xl md:text-6xl">Let Spekios take the first look.</h2>
         <div className="mt-9 flex justify-center gap-3">
-          <Button asChild size="lg"><Link to="/auth" search={{ mode: "signup" }}>Get started</Link></Button>
-          <Button asChild size="lg" variant="outline"><Link to="/auth">Sign in</Link></Button>
+          <LandingActions />
         </div>
       </div>
     </section>
+  );
+}
+
+function LandingActions() {
+  const { session, ready } = useAuth();
+  if (ready && session) return (
+    <>
+      <Button asChild size="lg" className="min-h-12"><Link to="/account">Open Spekios</Link></Button>
+      <Button asChild size="lg" variant="outline" className="min-h-12"><Link to="/account">Your account</Link></Button>
+    </>
+  );
+  return (
+    <>
+      <Button asChild size="lg"><Link to="/auth" search={{ mode: "signup" }}>Get started</Link></Button>
+      <Button asChild size="lg" variant="outline"><Link to="/auth">Sign in</Link></Button>
+    </>
   );
 }

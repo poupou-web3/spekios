@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { resolveConnection } from "./connection";
 import {
   CODE_TTL_SECONDS,
   ISSUE_LIMIT_PER_MINUTE,
@@ -44,11 +45,12 @@ export type BridgeCheck =
 async function validate(p: AuthorizeParams): Promise<BridgeCheck> {
   const shape = checkAuthorizeShape(p);
   if (!shape.ok) return { ok: false, code: "invalid_request", reason: shape.reason };
-  const client = await loadClient(p.client_id!);
+  if (!p.client_id || !p.redirect_uri) return { ok: false, code: "invalid_request", reason: "Missing client or redirect." };
+  const client = await loadClient(p.client_id);
   if (!client) {
     return { ok: false, code: "not_configured", reason: "This app connection is not configured or is disabled." };
   }
-  if (!isRegisteredRedirect(p.redirect_uri!, client.redirect_uris)) {
+  if (!isRegisteredRedirect(p.redirect_uri, client.redirect_uris)) {
     return { ok: false, code: "invalid_request", reason: "redirect_uri is not registered for this client." };
   }
   return { ok: true, clientName: client.display_name };
@@ -64,13 +66,12 @@ export const getBridgeStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async () => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin
       .from("bridge_clients")
-      .select("display_name, launch_url, redirect_uris")
+      .select("enabled, launch_url, redirect_uris")
       .eq("enabled", true);
-    const ready = (data ?? []).filter((c) => c.redirect_uris.length > 0);
-    const launch = ready.find((c) => c.launch_url && /^https:\/\//.test(c.launch_url));
-    return { configured: ready.length > 0, launchUrl: launch?.launch_url ?? null };
+    if (error) throw new Error("Could not check app connection");
+    return resolveConnection(data ?? []);
   });
 
 /** Signed-in: mint a single-use, short-lived handoff code and return the callback URL. */
@@ -80,6 +81,8 @@ export const issueHandoffCode = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const check = await validate(data);
     if (!check.ok) throw new Error(check.reason);
+    const { client_id, redirect_uri, code_challenge, state } = data;
+    if (!client_id || !redirect_uri || !code_challenge || !state) throw new Error("Invalid request");
 
     const { data: userRes, error: userErr } = await context.supabase.auth.getUser();
     const user = userRes?.user;
@@ -102,9 +105,9 @@ export const issueHandoffCode = createServerFn({ method: "POST" })
     );
     const { error } = await supabaseAdmin.from("bridge_handoff_codes").insert({
       code_hash: await sha256Hex(code),
-      client_id: data.client_id!,
-      redirect_uri: data.redirect_uri!,
-      code_challenge: data.code_challenge!,
+      client_id,
+      redirect_uri,
+      code_challenge,
       user_id: user.id,
       issuer: canonicalIssuer(projectRef),
       subject: user.id,
@@ -116,5 +119,5 @@ export const issueHandoffCode = createServerFn({ method: "POST" })
     });
     if (error) throw new Error("Could not create handoff");
 
-    return { redirect: buildCallbackUrl(data.redirect_uri!, code, data.state!) };
+    return { redirect: buildCallbackUrl(redirect_uri, code, state) };
   });

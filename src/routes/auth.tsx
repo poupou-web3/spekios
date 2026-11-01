@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/lib/auth";
-import { sanitizeLocalPath } from "@/lib/bridge/core";
+import { RETURN_KEY, authCallbackUrl, postLoginPath, sanitizeAuthReturn } from "@/lib/bridge/auth-return";
 import { AuthShell } from "@/components/auth-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,12 +12,11 @@ import { Label } from "@/components/ui/label";
 
 type Mode = "signin" | "signup" | "forgot";
 type Search = { mode?: Mode | undefined; redirect?: string | undefined };
-const RETURN_KEY = "spekios:return-to";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>): Search => ({
     mode: s["mode"] === "signup" || s["mode"] === "forgot" ? s["mode"] : undefined,
-    redirect: sanitizeLocalPath(s["redirect"]) ?? undefined,
+    redirect: sanitizeAuthReturn(s["redirect"]) ?? undefined,
   }),
   head: () => ({
     meta: [
@@ -46,9 +45,12 @@ function AuthPage() {
   // After any successful sign-in (password, OAuth return, email confirmation), go to the intended page.
   useEffect(() => {
     if (!ready || !session) return;
-    const stored = sanitizeLocalPath(sessionStorage.getItem(RETURN_KEY));
-    sessionStorage.removeItem(RETURN_KEY);
-    router.history.replace(redirect ?? stored ?? "/account");
+    let stored: string | null = null;
+    try {
+      stored = sessionStorage.getItem(RETURN_KEY);
+      sessionStorage.removeItem(RETURN_KEY);
+    } catch { /* URL return survives browsers that block storage. */ }
+    router.history.replace(postLoginPath(redirect, stored));
   }, [ready, session, redirect, router]);
 
   const setMode = (m: Mode) => {
@@ -65,7 +67,7 @@ function AuthPage() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       } else if (mode === "signup") {
-        const emailReturn = `${window.location.origin}/auth${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ""}`;
+        const emailReturn = authCallbackUrl(window.location.origin, redirect);
         const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: emailReturn } });
         if (error) throw error;
         if (!data.session) setNotice("Check your inbox to confirm your email address, then come back to sign in.");
@@ -82,9 +84,17 @@ function AuthPage() {
   }
 
   async function social(provider: "google" | "apple") {
-    if (redirect) sessionStorage.setItem(RETURN_KEY, redirect);
-    const result = await lovable.auth.signInWithOAuth(provider, { redirect_uri: `${window.location.origin}/auth` });
-    if (result.error) toast.error(result.error.message ?? `Could not continue with ${provider}`);
+    const safe = sanitizeAuthReturn(redirect);
+    try {
+      if (safe) sessionStorage.setItem(RETURN_KEY, safe);
+      else sessionStorage.removeItem(RETURN_KEY);
+    } catch { /* Return is also encoded in the same-origin OAuth callback. */ }
+    try {
+      const result = await lovable.auth.signInWithOAuth(provider, { redirect_uri: authCallbackUrl(window.location.origin, safe) });
+      if (result.error) toast.error(result.error.message ?? `Could not continue with ${provider}`);
+    } catch {
+      toast.error(`Could not continue with ${provider}. Please try again.`);
+    }
   }
 
   const title = mode === "signup" ? "Create your account" : mode === "forgot" ? "Reset your password" : "Welcome back";
