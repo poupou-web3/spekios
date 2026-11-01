@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 ## Project rules
+- Sitemap inventory is router-derived with required per-route decisions and private subtree exclusions; omit lastmod without authoritative page timestamps. Why: new public pages track routes without leaking account or auth URLs.
 - External-app sign-in uses the opaque handoff-code bridge in `src/lib/bridge/` + `/api/public/bridge/token`; never send tokens to the external app. Why: the Rust app must own its own session; contract lives in `docs/AUTH_BRIDGE.md`, keep it in sync.
 - `bridge_*` tables are server-only (service role, RLS with no policies). Why: they hold credential hashes and identity bindings.
 - Bridge is fail-closed: no enabled `bridge_clients` row means "connection pending", never a redirect. Why: no trusted target exists until configured.
