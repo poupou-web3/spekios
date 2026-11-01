@@ -10,6 +10,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AppConnection } from "@/components/app-connection";
 
 export const Route = createFileRoute("/_authenticated/account")({
   head: () => ({
@@ -48,34 +49,17 @@ function Account() {
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-5 py-14">
         <p className="eyebrow">Account</p>
-        <h1 className="font-display mt-3 text-5xl">Your account is ready.</h1>
+        <h1 className="font-display mt-3 text-4xl sm:text-5xl">Your account is ready.</h1>
 
-        <section className="mt-10 rounded-xl border border-border bg-card p-6 shadow-panel">
+        <section className="mt-10 min-w-0 border-y border-border py-6">
           {status.isLoading ? (
             <p className="text-sm text-muted-foreground">Checking app connection…</p>
           ) : status.isError ? (
             <p className="text-sm text-destructive">Could not check the app connection. Please refresh.</p>
-          ) : status.data?.configured ? (
-            <>
-              <div className="flex items-center gap-2 text-sm"><span className="h-2 w-2 rounded-full bg-ok" />App connection configured</div>
-              <p className="mt-2 text-sm text-muted-foreground">Open the Spekios app; it will sign you in through this account.</p>
-              {status.data.launchUrl && (
-                <Button asChild className="mt-4"><a href={status.data.launchUrl}>Open the Spekios app</a></Button>
-              )}
-            </>
-          ) : (
-            <>
-              <div className="flex items-center gap-2 text-sm"><span className="h-2 w-2 rounded-full bg-signal" />App connection pending</div>
-              <p className="mt-2 text-sm text-muted-foreground">
-                You're signed in, but the Spekios app isn't connected to this sign-in yet. Your workspace,
-                settings and history will be available there once the connection is switched on — nothing
-                more is needed from you.
-              </p>
-            </>
-          )}
+          ) : status.data ? <AppConnection connection={status.data} /> : null}
         </section>
 
-        <section className="mt-6 grid gap-4 rounded-xl border border-border bg-card p-6 text-sm">
+        <section className="mt-6 grid min-w-0 gap-4 rounded-lg border border-border bg-card p-5 text-sm">
           <Row k="Email" v={user?.email ?? "—"} />
           <Row k="Email confirmed" v={user?.email_confirmed_at ? "Yes" : "No"} />
           <Row k="Sign-in methods" v={providers.join(", ") || "—"} />
@@ -84,7 +68,7 @@ function Account() {
         {providers.includes("email") && <ChangePassword />}
 
         <div className="mt-8">
-          <Button variant="outline" onClick={signOut}>Sign out</Button>
+          <Button variant="outline" className="min-h-12" onClick={signOut}>Sign out</Button>
         </div>
       </main>
     </div>
@@ -93,9 +77,9 @@ function Account() {
 
 function Row({ k, v }: { k: string; v: string }) {
   return (
-    <div className="flex justify-between gap-4 border-b border-border pb-3 last:border-0 last:pb-0">
+    <div className="grid min-w-0 gap-1 border-b border-border pb-3 last:border-0 last:pb-0 sm:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] sm:gap-4">
       <span className="text-muted-foreground">{k}</span>
-      <span className="font-mono">{v}</span>
+      <span className="min-w-0 break-words font-mono [overflow-wrap:anywhere] sm:text-right">{v}</span>
     </div>
   );
 }
@@ -115,7 +99,7 @@ function ChangePassword() {
     toast.success("Password updated");
   }
   return (
-    <form onSubmit={submit} className="mt-6 grid gap-4 rounded-xl border border-border bg-card p-6">
+    <form onSubmit={submit} className="mt-6 grid min-w-0 gap-4 rounded-lg border border-border bg-card p-5">
       <h2 className="font-medium">Change password</h2>
       <div className="grid gap-1.5">
         <Label htmlFor="cur">Current password</Label>
@@ -125,7 +109,7 @@ function ChangePassword() {
         <Label htmlFor="new">New password</Label>
         <Input id="new" type="password" minLength={8} required autoComplete="new-password" value={next} onChange={(e) => setNext(e.target.value)} />
       </div>
-      <Button type="submit" variant="outline" disabled={busy} className="justify-self-start">Update password</Button>
+      <Button type="submit" variant="outline" disabled={busy} className="min-h-12 justify-self-start">Update password</Button>
     </form>
   );
 }

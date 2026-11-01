@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -36,6 +36,7 @@ function BridgeAuthorize() {
   const params = Route.useSearch();
   const { session, ready } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const check = useServerFn(checkBridgeRequest);
   const issue = useServerFn(issueHandoffCode);
   const [busy, setBusy] = useState(false);
@@ -57,8 +58,10 @@ function BridgeAuthorize() {
   }
 
   async function switchAccount() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
     await supabase.auth.signOut();
-    navigate({ to: "/auth", search: { redirect: here } });
+    navigate({ to: "/auth", search: { redirect: here }, replace: true });
   }
 
   if (q.isLoading || !ready) return <AuthShell title="Continue to Spekios"><p className="text-sm text-muted-foreground">Checking request…</p></AuthShell>;
@@ -94,10 +97,10 @@ function BridgeAuthorize() {
 
   return (
     <AuthShell title="Continue to Spekios" subtitle={<>Signing in to <strong>{q.data.clientName}</strong></>}>
-      <p className="text-sm">Signed in as <span className="font-mono">{session.user.email}</span></p>
+      <p className="min-w-0 text-sm">Signed in as <span className="block min-w-0 break-words font-mono [overflow-wrap:anywhere]">{session.user.email}</span></p>
       <div className="mt-5 grid gap-2">
-        <Button onClick={proceed} disabled={busy}>{busy ? "Continuing…" : "Continue"}</Button>
-        <Button variant="ghost" onClick={switchAccount}>Use a different account</Button>
+        <Button className="min-h-12" onClick={proceed} disabled={busy}>{busy ? "Continuing…" : "Continue"}</Button>
+        <Button className="min-h-12" variant="ghost" onClick={switchAccount}>Use a different account</Button>
       </div>
       {error && <p role="alert" className="mt-4 text-sm text-destructive">{error}</p>}
     </AuthShell>
