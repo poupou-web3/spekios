@@ -4,6 +4,7 @@ import { SiteFooter, SiteHeader } from "@/components/site-header";
 import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Spekios — Exploratory website QA with reproducible evidence" },

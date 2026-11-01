@@ -14,6 +14,7 @@ type Mode = "signin" | "signup" | "forgot";
 type Search = { mode?: Mode | undefined; redirect?: string | undefined };
 
 export const Route = createFileRoute("/auth")({
+  staticData: { sitemap: false },
   validateSearch: (s: Record<string, unknown>): Search => ({
     mode: s["mode"] === "signup" || s["mode"] === "forgot" ? s["mode"] : undefined,
     redirect: sanitizeAuthReturn(s["redirect"]) ?? undefined,

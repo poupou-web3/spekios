@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 const KEYS = ["response_type", "client_id", "redirect_uri", "state", "code_challenge", "code_challenge_method"] as const;
 
 export const Route = createFileRoute("/bridge/authorize")({
+  staticData: { sitemap: false },
   ssr: false,
   validateSearch: (s: Record<string, unknown>): AuthorizeParams => {
     const out: AuthorizeParams = {};

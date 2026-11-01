@@ -54,6 +54,7 @@ function basicAuth(request: Request): { id: string; secret: string } | null {
 }
 
 export const Route = createFileRoute("/api/public/bridge/token")({
+  staticData: { sitemap: false },
   server: {
     handlers: {
       GET: async () => err(405, "invalid_request", "Use POST.", { allow: "POST" }),

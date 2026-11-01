@@ -6,6 +6,7 @@ import { AuthShell } from "@/components/auth-shell";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/logout")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Signed out — Spekios" },

@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { AppConnection } from "@/components/app-connection";
 
 export const Route = createFileRoute("/_authenticated/account")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Your account — Spekios" },
