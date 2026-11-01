@@ -6,5 +6,5 @@
 
 # Google Search Console setup
 - [x] Check linked Google account and verified property access.
-- [ ] Add verification tag and public sitemap; validate preview.
-- [ ] Request publishing approval, verify live tag, add property, and submit live sitemap.
+- [x] Add verification tag and public sitemap; validate preview (three tests passed).
+- [x] Request publishing approval, verify live tag, add property, and submit live sitemap (Google accepted verification and submission).
