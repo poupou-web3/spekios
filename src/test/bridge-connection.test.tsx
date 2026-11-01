@@ -41,4 +41,7 @@ describe("trusted app launch configuration", () => {
     expect(resolveConnection([{ ...local, launch_url: "https://evil.test/login" }]).configured).toBe(false);
     expect(resolveConnection([{ ...local, redirect_uris: ["http://localhost:18080/other"] }]).configured).toBe(false);
   });
+  it("keeps HTTPS loopback computer-only too", () => {
+    expect(resolveConnection([{ ...local, redirect_uris: ["https://localhost:18080/auth/callback"], launch_url: "https://localhost:18080/login" }]).type).toBe("local");
+  });
 });

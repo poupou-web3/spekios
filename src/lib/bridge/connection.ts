@@ -33,7 +33,7 @@ export function resolveConnection(clients: readonly LaunchClient[]): BridgeConne
     const launch = trustedUrl(target);
     if (!launch || launch.pathname !== "/login" || target !== `${launch.origin}/login`) continue;
     if (!callbacks.some((u) => u.origin === launch.origin)) continue;
-    supported.push({ type: launch.protocol === "http:" ? "local" : "hosted", configured: true, launchUrl: launch.href, address: launch.origin });
+    supported.push({ type: launch.hostname === "localhost" || launch.hostname === "127.0.0.1" ? "local" : "hosted", configured: true, launchUrl: launch.href, address: launch.origin });
   }
   return supported.find((c) => c.type === "hosted") ?? supported[0] ?? pending;
 }
