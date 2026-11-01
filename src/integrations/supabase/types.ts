@@ -20,6 +20,7 @@ export type Database = {
           created_at: string
           display_name: string
           enabled: boolean
+          launch_url: string | null
           redirect_uris: string[]
           secret_sha256: string
           updated_at: string
@@ -29,6 +30,7 @@ export type Database = {
           created_at?: string
           display_name: string
           enabled?: boolean
+          launch_url?: string | null
           redirect_uris?: string[]
           secret_sha256: string
           updated_at?: string
@@ -38,6 +40,7 @@ export type Database = {
           created_at?: string
           display_name?: string
           enabled?: boolean
+          launch_url?: string | null
           redirect_uris?: string[]
           secret_sha256?: string
           updated_at?: string
