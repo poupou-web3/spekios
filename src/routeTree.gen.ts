@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as BridgeAuthorizeRouteImport } from './routes/bridge.authorize'
 import { Route as ApiPublicBridgeTokenRouteImport } from './routes/api/public/bridge/token'
@@ -42,6 +43,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   id: '/account',
   path: '/account',
@@ -63,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/logout': typeof LogoutRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/account': typeof AuthenticatedAccountRoute
   '/bridge/authorize': typeof BridgeAuthorizeRoute
   '/api/public/bridge/token': typeof ApiPublicBridgeTokenRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/logout': typeof LogoutRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/account': typeof AuthenticatedAccountRoute
   '/bridge/authorize': typeof BridgeAuthorizeRoute
   '/api/public/bridge/token': typeof ApiPublicBridgeTokenRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/logout': typeof LogoutRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/bridge/authorize': typeof BridgeAuthorizeRoute
   '/api/public/bridge/token': typeof ApiPublicBridgeTokenRoute
@@ -94,6 +103,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/logout'
     | '/reset-password'
+    | '/sitemap.xml'
     | '/account'
     | '/bridge/authorize'
     | '/api/public/bridge/token'
@@ -103,6 +113,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/logout'
     | '/reset-password'
+    | '/sitemap.xml'
     | '/account'
     | '/bridge/authorize'
     | '/api/public/bridge/token'
@@ -113,6 +124,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/logout'
     | '/reset-password'
+    | '/sitemap.xml'
     | '/_authenticated/account'
     | '/bridge/authorize'
     | '/api/public/bridge/token'
@@ -124,6 +136,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   LogoutRoute: typeof LogoutRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   BridgeAuthorizeRoute: typeof BridgeAuthorizeRoute
   ApiPublicBridgeTokenRoute: typeof ApiPublicBridgeTokenRoute
 }
@@ -163,6 +176,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/account': {
@@ -206,6 +226,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   LogoutRoute: LogoutRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   BridgeAuthorizeRoute: BridgeAuthorizeRoute,
   ApiPublicBridgeTokenRoute: ApiPublicBridgeTokenRoute,
 }
