@@ -16,12 +16,12 @@ const str = (v: unknown) => (typeof v === "string" ? v : undefined);
 function parseParams(input: unknown): AuthorizeParams {
   const o = (input ?? {}) as Record<string, unknown>;
   return {
-    response_type: str(o.response_type),
-    client_id: str(o.client_id),
-    redirect_uri: str(o.redirect_uri),
-    state: str(o.state),
-    code_challenge: str(o.code_challenge),
-    code_challenge_method: str(o.code_challenge_method),
+    response_type: str(o["response_type"]),
+    client_id: str(o["client_id"]),
+    redirect_uri: str(o["redirect_uri"]),
+    state: str(o["state"]),
+    code_challenge: str(o["code_challenge"]),
+    code_challenge_method: str(o["code_challenge_method"]),
   };
 }
 

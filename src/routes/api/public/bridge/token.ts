@@ -60,8 +60,8 @@ export const Route = createFileRoute("/api/public/bridge/token")({
       POST: async ({ request }) => {
         const body = await readBody(request);
         const basic = basicAuth(request);
-        const clientId = basic?.id ?? body.client_id;
-        const clientSecret = basic?.secret ?? body.client_secret;
+        const clientId = basic?.id ?? body["client_id"];
+        const clientSecret = basic?.secret ?? body["client_secret"];
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         const ip = request.headers.get("cf-connecting-ip") ?? request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/api/public/bridge/token")({
         });
         if (ipOk !== true) return err(429, "slow_down", "Rate limit exceeded.", { "retry-after": "60" });
 
-        if (body.grant_type !== "authorization_code") {
+        if (body["grant_type"] !== "authorization_code") {
           return err(400, "unsupported_grant_type", "grant_type must be authorization_code.");
         }
         if (!isValidClientId(clientId) || typeof clientSecret !== "string" || clientSecret.length < 32) {
@@ -96,9 +96,9 @@ export const Route = createFileRoute("/api/public/bridge/token")({
           return err(401, "invalid_client", "Client authentication failed.");
         }
 
-        const code = body.code;
-        const verifier = body.code_verifier;
-        const redirectUri = body.redirect_uri;
+        const code = body["code"];
+        const verifier = body["code_verifier"];
+        const redirectUri = body["redirect_uri"];
         if (!isValidCodeFormat(code) || !isValidVerifier(verifier) || typeof redirectUri !== "string") {
           return err(400, "invalid_request", "code, code_verifier and redirect_uri are required.");
         }

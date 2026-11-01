@@ -16,8 +16,8 @@ const RETURN_KEY = "spekios:return-to";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>): Search => ({
-    mode: s.mode === "signup" || s.mode === "forgot" ? s.mode : undefined,
-    redirect: sanitizeLocalPath(s.redirect) ?? undefined,
+    mode: s["mode"] === "signup" || s["mode"] === "forgot" ? s["mode"] : undefined,
+    redirect: sanitizeLocalPath(s["redirect"]) ?? undefined,
   }),
   head: () => ({
     meta: [
