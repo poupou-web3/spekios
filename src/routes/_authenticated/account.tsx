@@ -109,7 +109,7 @@ function ChangePassword() {
     setBusy(true);
     const { error } = await supabase.auth.updateUser({ password: next, current_password: current } as never);
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setCurrent("");
     setNext("");
     toast.success("Password updated");

@@ -10,11 +10,46 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as LogoutRouteImport } from './routes/logout'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
+import { Route as BridgeAuthorizeRouteImport } from './routes/bridge.authorize'
 import { Route as ApiPublicBridgeTokenRouteImport } from './routes/api/public/bridge/token'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LogoutRoute = LogoutRouteImport.update({
+  id: '/logout',
+  path: '/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const BridgeAuthorizeRoute = BridgeAuthorizeRouteImport.update({
+  id: '/bridge/authorize',
+  path: '/bridge/authorize',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicBridgeTokenRoute = ApiPublicBridgeTokenRouteImport.update({
@@ -25,27 +60,71 @@ const ApiPublicBridgeTokenRoute = ApiPublicBridgeTokenRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/logout': typeof LogoutRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/account': typeof AuthenticatedAccountRoute
+  '/bridge/authorize': typeof BridgeAuthorizeRoute
   '/api/public/bridge/token': typeof ApiPublicBridgeTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/logout': typeof LogoutRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/account': typeof AuthenticatedAccountRoute
+  '/bridge/authorize': typeof BridgeAuthorizeRoute
   '/api/public/bridge/token': typeof ApiPublicBridgeTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/logout': typeof LogoutRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/account': typeof AuthenticatedAccountRoute
+  '/bridge/authorize': typeof BridgeAuthorizeRoute
   '/api/public/bridge/token': typeof ApiPublicBridgeTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/public/bridge/token'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/logout'
+    | '/reset-password'
+    | '/account'
+    | '/bridge/authorize'
+    | '/api/public/bridge/token'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/public/bridge/token'
-  id: '__root__' | '/' | '/api/public/bridge/token'
+  to:
+    | '/'
+    | '/auth'
+    | '/logout'
+    | '/reset-password'
+    | '/account'
+    | '/bridge/authorize'
+    | '/api/public/bridge/token'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/logout'
+    | '/reset-password'
+    | '/_authenticated/account'
+    | '/bridge/authorize'
+    | '/api/public/bridge/token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  LogoutRoute: typeof LogoutRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  BridgeAuthorizeRoute: typeof BridgeAuthorizeRoute
   ApiPublicBridgeTokenRoute: typeof ApiPublicBridgeTokenRoute
 }
 
@@ -58,6 +137,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/logout': {
+      id: '/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof LogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/account': {
+      id: '/_authenticated/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthenticatedAccountRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/bridge/authorize': {
+      id: '/bridge/authorize'
+      path: '/bridge/authorize'
+      fullPath: '/bridge/authorize'
+      preLoaderRoute: typeof BridgeAuthorizeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/bridge/token': {
       id: '/api/public/bridge/token'
       path: '/api/public/bridge/token'
@@ -68,8 +189,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAccountRoute: AuthenticatedAccountRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  LogoutRoute: LogoutRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  BridgeAuthorizeRoute: BridgeAuthorizeRoute,
   ApiPublicBridgeTokenRoute: ApiPublicBridgeTokenRoute,
 }
 export const routeTree = rootRouteImport
