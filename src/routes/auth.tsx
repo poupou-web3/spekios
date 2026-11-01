@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -36,6 +36,7 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { mode = "signin", redirect } = Route.useSearch();
   const navigate = useNavigate();
+  const router = useRouter();
   const { session, ready } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,15 +48,13 @@ function AuthPage() {
     if (!ready || !session) return;
     const stored = sanitizeLocalPath(sessionStorage.getItem(RETURN_KEY));
     sessionStorage.removeItem(RETURN_KEY);
-    window.location.replace(redirect ?? stored ?? "/account");
-  }, [ready, session, redirect]);
+    router.history.replace(redirect ?? stored ?? "/account");
+  }, [ready, session, redirect, router]);
 
   const setMode = (m: Mode) => {
     setNotice(null);
     navigate({ to: "/auth", search: { mode: m === "signin" ? undefined : m, redirect }, replace: true });
   };
-
-  const emailReturn = `${window.location.origin}/auth${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ""}`;
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -66,6 +65,7 @@ function AuthPage() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       } else if (mode === "signup") {
+        const emailReturn = `${window.location.origin}/auth${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ""}`;
         const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: emailReturn } });
         if (error) throw error;
         if (!data.session) setNotice("Check your inbox to confirm your email address, then come back to sign in.");
