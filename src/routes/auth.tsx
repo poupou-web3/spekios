@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 type Mode = "signin" | "signup" | "forgot";
-type Search = { mode?: Mode; redirect?: string };
+type Search = { mode?: Mode | undefined; redirect?: string | undefined };
 const RETURN_KEY = "spekios:return-to";
 
 export const Route = createFileRoute("/auth")({
