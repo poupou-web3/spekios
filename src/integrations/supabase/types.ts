@@ -14,13 +14,151 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bridge_clients: {
+        Row: {
+          client_id: string
+          created_at: string
+          display_name: string
+          enabled: boolean
+          redirect_uris: string[]
+          secret_sha256: string
+          updated_at: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          display_name: string
+          enabled?: boolean
+          redirect_uris?: string[]
+          secret_sha256: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          display_name?: string
+          enabled?: boolean
+          redirect_uris?: string[]
+          secret_sha256?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      bridge_handoff_codes: {
+        Row: {
+          auth_time: string | null
+          client_id: string
+          code_challenge: string
+          code_hash: string
+          consumed_at: string | null
+          created_at: string
+          email: string | null
+          email_verified: boolean
+          expires_at: string
+          id: string
+          issuer: string
+          providers: string[]
+          redirect_uri: string
+          subject: string
+          user_id: string
+        }
+        Insert: {
+          auth_time?: string | null
+          client_id: string
+          code_challenge: string
+          code_hash: string
+          consumed_at?: string | null
+          created_at?: string
+          email?: string | null
+          email_verified?: boolean
+          expires_at: string
+          id?: string
+          issuer: string
+          providers?: string[]
+          redirect_uri: string
+          subject: string
+          user_id: string
+        }
+        Update: {
+          auth_time?: string | null
+          client_id?: string
+          code_challenge?: string
+          code_hash?: string
+          consumed_at?: string | null
+          created_at?: string
+          email?: string | null
+          email_verified?: boolean
+          expires_at?: string
+          id?: string
+          issuer?: string
+          providers?: string[]
+          redirect_uri?: string
+          subject?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bridge_handoff_codes_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "bridge_clients"
+            referencedColumns: ["client_id"]
+          },
+        ]
+      }
+      bridge_rate_events: {
+        Row: {
+          bucket: string
+          created_at: string
+          id: number
+        }
+        Insert: {
+          bucket: string
+          created_at?: string
+          id?: number
+        }
+        Update: {
+          bucket?: string
+          created_at?: string
+          id?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      bridge_rate_hit: {
+        Args: { p_bucket: string; p_max: number; p_window_seconds: number }
+        Returns: boolean
+      }
+      consume_bridge_code: {
+        Args: { p_code_hash: string }
+        Returns: {
+          auth_time: string | null
+          client_id: string
+          code_challenge: string
+          code_hash: string
+          consumed_at: string | null
+          created_at: string
+          email: string | null
+          email_verified: boolean
+          expires_at: string
+          id: string
+          issuer: string
+          providers: string[]
+          redirect_uri: string
+          subject: string
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "bridge_handoff_codes"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
     }
     Enums: {
       [_ in never]: never
