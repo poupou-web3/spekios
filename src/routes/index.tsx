@@ -25,6 +25,7 @@ function Landing() {
       <main>
         <Hero />
         <HowItWorks />
+        <Signals />
         <Evidence />
         <Agents />
         <FinalCta />
@@ -45,8 +46,7 @@ function Hero() {
           <em className="text-signal">Get evidence,</em> not guesses.
         </h1>
         <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-          Spekios explores your website's user flows in a real Chromium browser, captures screenshots
-          and evidence along the way, and surfaces potential bugs for you to reproduce and review.
+          Traditional QA checks the tests you thought to write. Spekios explores what you didn't: it works through your site in a real Chromium browser and brings back evidence you can replay.
         </p>
         <div className="mt-9 flex flex-wrap gap-3">
           <LandingActions />
@@ -103,9 +103,9 @@ function ProductPreview() {
 function HowItWorks() {
   const items = [
     ["Provide a URL", "Start with the site you want explored. No test scripts to write first."],
-    ["Spekios explores", "An AI agent walks through user flows in Chromium — navigating, filling forms, clicking through."],
-    ["Evidence is captured", "Screenshots, steps taken and page signals are recorded as the exploration runs."],
-    ["You review", "Potential bugs are surfaced for human review, with steps to reproduce them."],
+    ["Predicts, then acts", "Before every click, form entry or navigation, the agent writes down what should happen. Then it does it."],
+    ["Checks every signal", "It compares the result with that prediction using the screenshot, the page structure, network requests and console errors, not just one of them."],
+    ["Replayed, then reviewed", "Suspected bugs are replayed in a fresh browser. Then you or your coding agent review them."],
   ];
   return (
     <section id="how" className="border-t border-border">
@@ -126,11 +126,36 @@ function HowItWorks() {
   );
 }
 
+function Signals() {
+  const signals = [
+    ["Sees the screen", "Screenshots before and after each action, compared pixel by pixel."],
+    ["Reads the structure", "Buttons, links, fields and their state, from the page itself."],
+    ["Watches the network", "Failed requests and slow or unfinished responses."],
+    ["Listens to the console", "JavaScript errors raised by the action."],
+  ];
+  return (
+    <section className="border-t border-border">
+      <div className="mx-auto max-w-6xl px-5 py-24">
+        <h2 className="font-display max-w-4xl text-4xl md:text-5xl">It looks at the page the way you do, and then checks what you can't see.</h2>
+        <ul className="mt-14 grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+          {signals.map(([heading, text]) => (
+            <li key={heading} className="min-w-0 rounded-lg border border-border bg-card p-6">
+              <h3 className="text-lg font-medium">{heading}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{text}</p>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-6 text-muted-foreground">A finding needs a broken expectation. A changed screenshot or an error on its own is a clue, not a verdict.</p>
+      </div>
+    </section>
+  );
+}
+
 function Evidence() {
   const points = [
     ["Screenshots at each step", "See exactly what the browser showed when something looked wrong."],
     ["Reproduction steps", "Every potential bug comes with the path that led to it, so you can replay it yourself."],
-    ["Human review", "Findings are potential bugs until a person confirms or dismisses them."],
+    ["AI proposes. You decide.", "The AI only proposes potential bugs. Each one is replayed in a fresh browser, and nothing counts as confirmed until a person, or an agent working through the MCP API, has reviewed the evidence."],
   ];
   return (
     <section id="evidence" className="border-t border-border bg-secondary/50">
@@ -164,19 +189,19 @@ function Agents() {
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-2">
         <div>
           <p className="eyebrow">Agent integration</p>
-          <h2 className="font-display mt-4 text-4xl md:text-5xl">Hand findings straight to your coding agent.</h2>
+          <h2 className="font-display mt-4 text-4xl md:text-5xl">Review by a person or by an agent.</h2>
           <p className="mt-5 text-muted-foreground">
-            Spekios connects to coding agents over MCP, so an agent can read a finding, its evidence and its
-            reproduction steps — and work on a fix with the full context.
+            Everything in the workspace is also available over MCP and HTTP. A coding agent can list findings, read the screenshots and network evidence, replay a bug, triage it as a bug, intended behaviour or a duplicate, and check that its fix works on a new deployment.
           </p>
         </div>
-        <figure>
+        <figure className="min-w-0">
           <pre className="overflow-x-auto rounded-xl border border-ink-border bg-ink p-5 font-mono text-sm leading-relaxed text-ink-foreground shadow-panel">
 {`agent  → spekios.list_findings()
 spekios ← 1 potential bug awaiting review
 agent  → spekios.get_finding("signup-500")
 spekios ← steps, screenshots, network trace
-agent  → opens a fix in your repository`}
+agent  → spekios.reproduce("signup-500")   spekios ← reproduced in a fresh browser
+agent  → opens a fix, then spekios.verify_fix()   spekios ← resolved`}
           </pre>
           <figcaption className="mt-3 text-xs text-muted-foreground">Illustrative exchange; tool names are examples.</figcaption>
         </figure>

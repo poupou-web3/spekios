@@ -47,7 +47,7 @@ export function SiteFooter() {
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-10 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
         <Logo />
-        <p>Exploratory website QA with evidence you can reproduce.</p>
+        <p>Exploratory QA that finds what your tests don't, with evidence you can replay.</p>
         <p>© {new Date().getFullYear()} Spekios</p>
       </div>
     </footer>
