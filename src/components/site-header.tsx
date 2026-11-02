@@ -45,10 +45,15 @@ export function SiteHeader() {
 export function SiteFooter() {
   return (
     <footer className="border-t border-border">
-      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-10 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
-        <Logo />
-        <p>Exploratory QA that finds what your tests don't, with evidence you can replay.</p>
-        <p>© {new Date().getFullYear()} Spekios</p>
+      <div className="mx-auto max-w-6xl px-5 py-10 text-sm text-muted-foreground">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <Logo />
+          <p>Exploratory QA that finds what your tests don't, with evidence you can replay.</p>
+          <p>© {new Date().getFullYear()} Spekios</p>
+        </div>
+        <p className="mt-3 text-xs md:text-right">
+          Built for the <a href="https://dev.meta.ai/events/global-hackathon" target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-foreground">Meta Global AI Developer Hackathon</a> · Powered by Meta's Wonder and Spark
+        </p>
       </div>
     </footer>
   );

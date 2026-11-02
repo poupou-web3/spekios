@@ -40,7 +40,9 @@ function Hero() {
     <section className="relative overflow-hidden">
       <div aria-hidden className="paper-grid absolute inset-0 opacity-60" />
       <div className="relative mx-auto max-w-6xl px-5 pt-20 pb-16 md:pt-28">
-        <p className="eyebrow">Exploratory QA for the web</p>
+        <p className="eyebrow">
+          Built for the <a href="https://dev.meta.ai/events/global-hackathon" target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-foreground">Meta Global AI Developer Hackathon</a>
+        </p>
         <h1 className="font-display mt-5 max-w-4xl text-5xl leading-[1.02] md:text-7xl">
           Point it at a URL.<br />
           <em className="text-signal">Get evidence,</em> not guesses.
