@@ -16,4 +16,4 @@
 # Google and AI-search review
 - [x] Check Google indexing, current search-readiness findings, and published content.
 - [x] Research realistic US keyword opportunities with volume, difficulty and competing results.
-- [ ] Add and verify the approved sitemap reference in crawler rules; report publication and AI-visibility limits.
+- [x] Add and verify the approved sitemap reference in crawler rules (three sitemap tests passed); report publication and AI-visibility limits without publishing.
