@@ -194,7 +194,7 @@ function Agents() {
             Everything in the workspace is also available over MCP and HTTP. A coding agent can list findings, read the screenshots and network evidence, replay a bug, triage it as a bug, intended behaviour or a duplicate, and check that its fix works on a new deployment.
           </p>
         </div>
-        <figure>
+        <figure className="min-w-0">
           <pre className="overflow-x-auto rounded-xl border border-ink-border bg-ink p-5 font-mono text-sm leading-relaxed text-ink-foreground shadow-panel">
 {`agent  → spekios.list_findings()
 spekios ← 1 potential bug awaiting review
