@@ -10,5 +10,5 @@
 - [x] Request publishing approval, verify live tag, add property, and submit live sitemap (Google accepted verification and submission).
 
 # Landing-page copy update
-- [ ] Apply supplied wording and four-signal section while preserving design and illustrative labels.
-- [ ] Verify preview copy and desktop/mobile layout; do not publish.
+- [x] Apply supplied wording and four-signal section while preserving design and illustrative labels.
+- [x] Verify preview copy and desktop/mobile layout at 1280, 390 and 320px with no horizontal overflow or browser errors; do not publish.
