@@ -12,3 +12,8 @@
 # Landing-page copy update
 - [x] Apply supplied wording and four-signal section while preserving design and illustrative labels.
 - [x] Verify preview copy and desktop/mobile layout at 1280, 390 and 320px with no horizontal overflow or browser errors; do not publish.
+
+# Google and AI-search review
+- [x] Check Google indexing, current search-readiness findings, and published content.
+- [x] Research realistic US keyword opportunities with volume, difficulty and competing results.
+- [ ] Add and verify the approved sitemap reference in crawler rules; report publication and AI-visibility limits.
