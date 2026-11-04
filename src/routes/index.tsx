@@ -71,7 +71,7 @@ function ProductPreview() {
     <figure className="mt-16">
       <div className="overflow-hidden rounded-xl border border-ink-border bg-ink text-ink-foreground shadow-panel">
         <div className="flex items-center justify-between border-b border-ink-border px-4 py-2.5 font-mono text-xs text-ink-muted">
-          <span>exploration · example-shop.test</span>
+          <span>exploration · larchwodd-faulty.spekios.com</span>
           <span className="rounded border border-ink-border px-2 py-0.5">Illustrative preview</span>
         </div>
         <div className="grid md:grid-cols-[1.1fr_1fr]">
