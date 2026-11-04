@@ -1,10 +1,10 @@
-# Account UX update
 # Email setup
 - [x] Scaffold managed auth emails and brand confirmation/password recovery.
 - [ ] Complete sender DNS verification (pending external DNS propagation/records in More → Emails).
 - [ ] Activate published branded emails (requires user-approved publication).
 - [ ] Configure exact notify@spekios.com sender (root From setting is not enabled in current domain setup).
 
+# Account UX update
 - [x] Validate trusted local/hosted launch targets and test connection rules.
 - [x] Add desktop launch and phone/tablet continuation actions; fix identity wrapping.
 - [x] Preserve authorize returns across sign-in and update signed-in entry points.
