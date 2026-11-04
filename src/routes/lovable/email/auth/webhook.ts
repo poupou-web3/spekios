@@ -29,7 +29,7 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
           sendUrl: process.env['LOVABLE_SEND_URL'],
           emails: {
             signup: {
-              subject: 'Confirm your email',
+              subject: 'Confirm your email — Spekios',
               render: (data) =>
                 React.createElement(SignupEmail, {
                   siteName: SITE_NAME,
@@ -56,7 +56,7 @@ export const Route = createFileRoute("/lovable/email/auth/webhook")({
                 }),
             },
             recovery: {
-              subject: 'Reset your password',
+              subject: 'Reset your password — Spekios',
               render: (data) =>
                 React.createElement(RecoveryEmail, {
                   siteName: SITE_NAME,
