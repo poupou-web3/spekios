@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 ## Project rules
+- Keep entities aliases limited to legacy file imports, never the whole package. Why: HTML parsers require different major versions and must resolve their own exports.
 - Authentication emails use the managed handler and scaffolded six-template map; share inline brand styles in email-templates/brand.ts. Why: verification and password recovery must retain managed security and email-client compatibility.
 - Sitemap inventory is router-derived with required per-route decisions and private subtree exclusions; omit lastmod without authoritative page timestamps. Why: new public pages track routes without leaking account or auth URLs.
 - External-app sign-in uses the opaque handoff-code bridge in `src/lib/bridge/` + `/api/public/bridge/token`; never send tokens to the external app. Why: the Rust app must own its own session; contract lives in `docs/AUTH_BRIDGE.md`, keep it in sync.
