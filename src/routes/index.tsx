@@ -157,7 +157,7 @@ function Evidence() {
   const points = [
     ["Screenshots at each step", "See exactly what the browser showed when something looked wrong."],
     ["Reproduction steps", "Every potential bug comes with the path that led to it, so you can replay it yourself."],
-    ["AI proposes. You decide.", "The AI only proposes potential bugs. Each one is replayed in a fresh browser, and nothing counts as confirmed until a person, or an agent working through the MCP API, has reviewed the evidence."],
+    ["AI proposes. You or your agent decide.", "The AI only proposes potential bugs. Each one is replayed in a fresh browser, and nothing counts as confirmed until a person, or an agent working through the MCP API, has reviewed the evidence."],
   ];
   return (
     <section id="evidence" className="border-t border-border bg-secondary/50">
