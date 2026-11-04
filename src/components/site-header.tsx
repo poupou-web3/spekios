@@ -51,6 +51,9 @@ export function SiteFooter() {
           <p>Exploratory QA that finds what your tests don't, with evidence you can replay.</p>
           <p>© {new Date().getFullYear()} Spekios</p>
         </div>
+        <p className="mt-3 md:text-right">
+          <a href="mailto:contact@spekios.com" className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-foreground">contact@spekios.com</a>
+        </p>
         <p className="mt-3 text-xs md:text-right">
           Built for the <a href="https://dev.meta.ai/events/global-hackathon" target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-foreground">Meta Global AI Developer Hackathon</a> · Powered by Meta's Wonder and Spark
         </p>
