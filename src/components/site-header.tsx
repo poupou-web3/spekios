@@ -1,4 +1,6 @@
 import { Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 
@@ -43,6 +45,23 @@ export function SiteHeader() {
 }
 
 export function SiteFooter() {
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "error">("idle");
+
+  useEffect(() => {
+    if (copyStatus === "idle") return;
+    const timer = window.setTimeout(() => setCopyStatus("idle"), 2500);
+    return () => window.clearTimeout(timer);
+  }, [copyStatus]);
+
+  async function copyEmail() {
+    try {
+      await navigator.clipboard.writeText("contact@spekios.com");
+      setCopyStatus("copied");
+    } catch {
+      setCopyStatus("error");
+    }
+  }
+
   return (
     <footer className="border-t border-border">
       <div className="mx-auto max-w-6xl px-5 py-10 text-sm text-muted-foreground">
@@ -51,9 +70,13 @@ export function SiteFooter() {
           <p>Exploratory QA that finds what your tests don't, with evidence you can replay.</p>
           <p>© {new Date().getFullYear()} Spekios</p>
         </div>
-        <p className="mt-3 md:text-right">
+        <div className="mt-3 flex items-center gap-1 md:justify-end">
           <a href="mailto:contact@spekios.com" className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-foreground">contact@spekios.com</a>
-        </p>
+          <Button type="button" variant="ghost" size="icon" className="h-11 w-11 shrink-0" onClick={copyEmail} aria-label={copyStatus === "copied" ? "Email copied" : "Copy email address"} title={copyStatus === "copied" ? "Email copied" : "Copy email address"}>
+            {copyStatus === "copied" ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
+          </Button>
+          <span className="sr-only" role="status">{copyStatus === "copied" ? "Email address copied to clipboard." : copyStatus === "error" ? "Unable to copy. Please select and copy the email address." : ""}</span>
+        </div>
         <p className="mt-3 text-xs md:text-right">
           Built for the <a href="https://dev.meta.ai/events/global-hackathon" target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-foreground">Meta Global AI Developer Hackathon</a> · Powered by Meta's Wonder and Spark
         </p>
